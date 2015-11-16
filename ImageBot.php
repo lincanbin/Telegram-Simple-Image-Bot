@@ -37,7 +37,7 @@ class ImageBotChat extends TelegramBotChat {
 
 
 	public function message($text, $message) {
-		$this->returnRandomPicture("images");
+		//$this->returnRandomPicture("images");
 		return;
 	}
 
