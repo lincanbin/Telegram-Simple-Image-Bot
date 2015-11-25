@@ -1,6 +1,17 @@
 <?php
 require_once 'TelegramBot.php';
 
+/*
+https://www.94cb.com/Telegram-Simple-Image-Bot/webhook.php
+{
+    "message": {
+        "chat": {
+            "id": 12450
+        },
+        "text": "/pic @canbin_bot"
+    }
+}
+*/
 class ImageBot extends TelegramBot {
 	public function init() {
 	parent::init();
@@ -10,12 +21,28 @@ class ImageBot extends TelegramBot {
 
 class ImageBotChat extends TelegramBotChat {
 	private $responseTable = array(
-		'黄图' => array('text'=>'要优雅不要污'),
-		'女装' => array('text'=>'窝也好想要女装……然后和大姐姐一起玩。'),
-		'肛' => array('text'=>'窝也好想被大姐姐用双头龙肛'),
-		'大吊' => array('text'=>'谁的屌有窝大？'),
-		'大屌' => array('text'=>'谁的屌有窝大？'),
-		'噫' => array('text'=>'
+		'碎叫' => array('text'=>'晚安'),
+		'睡觉' => array('text'=>'晚安'),
+		'睡了' => array('text'=>'晚安'),
+		//'买' => array('photo'=>'buy'),
+		'好污' => array(
+			'photo'=>'images',
+			'text'=>'
+👌👉🏿👌👌👌👌👌👌👌👌👌👌
+👌👌👉🏿👌👌👉🏿👉🏿👉🏿👉🏿👉🏿👉🏿👌
+👌👌👌👌👌👌👌👌👌👌👌👌
+👉🏿👌👌👌👌👌👌👌👌👌👌👌
+👌👉🏿👌👌👉🏿👉🏿👉🏿👉🏿👉🏿👉🏿👉🏿👉🏿
+👌👌👌👌👌👌👉🏿👌👌👌👌👌
+👌👌👉🏿👌👌👌👉🏿👌👌👌👌👌
+👌👉🏿👌👌👌👉🏿👉🏿👉🏿👉🏿👉🏿👉🏿👌
+👉🏿👉🏿👌👌👌👌👌👌👌👌👉🏿👌
+👌👉🏿👌👌👌👌👌👌👌👌👉🏿👌
+👌👉🏿👌👌👌👌👉🏿👌👌👉🏿👌👌
+👌👉🏿👌👌👌👌👌👉🏿👉🏿👌👌👌
+'),
+
+		'噫！' => array('text'=>'
 🌚🌚🌚🌚🌚🌚🌚🌚🌚🌚🌝🌚🌚🌚🌚🌚
 🌚🌚🌚🌚🌚🌚🌚🌚🌚🌚🌚🌝🌚🌚🌝🌚
 🌚🌝🌝🌝🌝🌚🌝🌝🌝🌝🌝🌝🌝🌝🌝🌝
@@ -32,8 +59,23 @@ class ImageBotChat extends TelegramBotChat {
 🌚🌚🌚🌚🌚🌚🌝🌚🌝🌚🌚🌝🌚🌝🌚🌚
 🌚🌚🌚🌚🌚🌝🌚🌚🌝🌚🌚🌚🌚🌝🌚🌚
 🌚🌚🌚🌚🌚🌚🌚🌚🌚🌝🌝🌝🌝🌝🌚🌚'),
-		'😂' => array('text'=>'😂😂😂'),
-		'🌝' => array('text'=>'🌚')
+/*
+		'噫'=> array('text'=>'
+🌚🌚🌚🌚🌚🌚🌚🌝🌚🌚🌚🌚
+🌝🌝🌝🌚🌝🌝🌝🌝🌝🌝🌝🌚
+🌝🌚🌝🌚🌚🌝🌚🌚🌝🌚🌚🌚
+🌝🌚🌝🌝🌝🌝🌝🌝🌝🌝🌝🌝
+🌝🌚🌝🌚🌝🌚🌚🌚🌚🌝🌚🌚
+🌝🌚🌝🌚🌝🌝🌝🌝🌝🌝🌚🌚
+🌝🌚🌝🌚🌝🌚🌚🌚🌚🌝🌚🌚
+🌝🌝🌝🌚🌝🌝🌝🌝🌝🌝🌚🌚
+🌝🌚🌝🌚🌚🌝🌚🌝🌚🌚🌚🌚
+🌚🌚🌚🌚🌝🌝🌚🌚🌝🌚🌝🌚
+🌚🌚🌚🌝🌚🌝🌚🌚🌚🌝🌚🌝
+🌚🌚🌚🌚🌚🌚🌝🌝🌝🌝🌚🌚
+'),
+*/
+		'😂😂😂' => array('text'=>'😂😂😂')
 	);
 	public function __construct($core, $chat_id) {
 	parent::__construct($core, $chat_id);
@@ -50,12 +92,18 @@ class ImageBotChat extends TelegramBotChat {
 			case 'about':
 				$this->apiSendMessage("https://github.com/lincanbin");
 				break;
+			case 'yi':
+				$this->apiSendMessage($this->responseTable['噫！']['text']);
+				break;
+			case 'pic':
+				$this->returnPicture($this->getRandomPicturePath("images"));
+				break;
 			case 'hentai':
 			case 'cg':
 				$this->returnPicture($this->getRandomPicturePath("cg"));
 				break;
 			default:
-				$this->returnPicture($this->getRandomPicturePath("images"));
+				//$this->returnPicture($this->getRandomPicturePath("images"));
 				break;
 		}
 		return;
@@ -63,12 +111,27 @@ class ImageBotChat extends TelegramBotChat {
 
 
 	public function message($text, $message) {
+		/*
+		$reply_string = file_get_contents('./reply.txt', FILE_USE_INCLUDE_PATH);
+		if($reply_string){
+			$this->apiSendMessage($reply_string);
+			file_put_contents('./reply.txt', "");
+		}
+		*/
+		
 		foreach ($this->responseTable as $key => $value) {
 			if(strpos($text, $key) !== false){
-				$this->apiSendMessage($value['text']);
+				if(isset($value['photo'])){
+					$this->returnPicture($this->getRandomPicturePath($value['photo']));
+					sleep(5);
+				}
+				if(isset($value['text'])){
+					$this->apiSendMessage($value['text']);
+				}
 				break;
 			}
 		}
+		
 		return;
 	}
 
