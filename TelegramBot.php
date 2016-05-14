@@ -81,25 +81,25 @@ abstract class TelegramBotCore {
 			'http_method' => 'GET',
 			'timeout' => $this->netTimeout,
 		);
-		$params_arr = array();
 		foreach ($params as $key => &$val) {
-			if (!is_numeric($val) && !is_string($val)) {
+			if (!is_numeric($val) && !is_string($val) && !is_object($val)) {
 				$params[$key] = json_encode($val);
-				$val =  json_encode($val);
+				//$val =  json_encode($val);
 			}
-			$params_arr[] = urlencode($key).'='.urlencode($val);
 		}
-		$query_string = implode('&', $params_arr);
 
 		$url = $this->apiUrl.'/'.$method;
 
+		error_log($url . "\n", 3, __DIR__ . "/my-errors.log");
+		error_log(var_export($params) . "\n", 3, __DIR__ . "/my-errors.log");
 		if ($options['http_method'] === 'POST') {
 			//var_dump($url);
 			//var_dump($params);
-			curl_setopt($this->handle, CURLOPT_SAFE_UPLOAD, false);
+			//curl_setopt($this->handle, CURLOPT_SAFE_UPLOAD, false);
 			curl_setopt($this->handle, CURLOPT_POST, true);
 			curl_setopt($this->handle, CURLOPT_POSTFIELDS, $params);
 		} else {
+			$query_string = http_build_query($params);
 			$url .= ($query_string ? '?'.$query_string : '');
 			curl_setopt($this->handle, CURLOPT_HTTPGET, true);
 		}
@@ -198,8 +198,8 @@ class TelegramBot extends TelegramBotCore {
 					}
 					if (preg_match('/^(?:\/([a-z0-9_]+)(@[a-z0-9_]+)?(?:\s+(.*))?)$/is', $text, $matches)) {
 						$command = $matches[1];
-						$command_owner = strtolower($matches[2]);
-						$command_params = $matches[3];
+						$command_owner = empty($matches[2]) ? null : strtolower($matches[2]);
+						$command_params = empty($matches[3]) ? null : $matches[3];
 						if (!$command_owner || $command_owner == $username) {
 							$method = 'command_'.$command;
 							if (method_exists($chat, $method)) {
